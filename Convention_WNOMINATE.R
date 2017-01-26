@@ -30,7 +30,7 @@ library(plyr)
 #For the .R file located at ftp://voteview.com/wf1/wnominate_un_stata_file.r, use "un31-33.dta".
 
 #setting my working directory
-setwd("/Users/DavidAGelman/Documents/PROJECTS/Constitional Convention Delegate Verbosity Data Set/Convention Vote Data/ICPSR_33865/DS0001")
+#setwd("")
 
 ##################LOAD IN THE DATA#####################################
 #load in the roll call data for the Constitutional Convention published in ICPSR study 33865
