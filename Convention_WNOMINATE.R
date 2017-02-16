@@ -27,7 +27,7 @@ library(plyr)
 
 #For more examples of implementing W-NOMINATE, see http://www.voteview.com/wnominate_in_R.html
 
-#For the .R file located at ftp://voteview.com/wf1/wnominate_un_stata_file.r, use "un31-33.dta".
+#For the .R file located at ftp://voteview.com/wf1/wnominate_un_stata_file.r, use the file "un31-33.dta".
 
 #setting my working directory
 #setwd("")
@@ -46,7 +46,7 @@ delegates=cbind(convention_matrix[,1],convention_matrix[,17:71])
 #rename the first column
 colnames(delegates)[1]<-"ROLL_CALL"
 
-#through a "v" in front of the roll call number
+#throw a "v" in front of the roll call number
 delegates$ROLL_CALL=paste("v",delegates$ROLL_CALL,sep="")
 
 
@@ -62,7 +62,7 @@ delegates_matrix<-ifelse(delegates[,2:56]== "(0) delegate attended but his vote 
 #make it a dataframe with the roll calls
 delegates_matrix1<- data.frame(delegates_matrix)
 
-#call the working frame something new
+#call the working frame something new for ease of working if we need to backtrack
 delegates_matrix<- delegates_matrix1
 
 #make sure there are no NAs being induced (if done incorrectly, Mason gets NAs)
@@ -84,9 +84,9 @@ data=data[c(621,1:620)]
 
 ##########################################
 ##########################################
-##########################################
-##########################################
 #now we start the NOMINATE procedure
+##########################################
+##########################################
 
 #first we create the rollcall object
 rc_convention<-rollcall(as.matrix(data[,-1]), #use the object called data for the data except the frist column (the names)
@@ -101,22 +101,24 @@ rc_convention<-rollcall(as.matrix(data[,-1]), #use the object called data for th
 ##########################################
 ##########################################
 
-#run a 1 dimension nominate with James Wilson as the anchor
+#run a 1 dimension nominate with James Wilson (PA) as the anchor
 result_1dim_Wilson <- wnominate(rc_convention, dims=1, polarity=c("JAMES_WILSON"))	
 summary(result_1dim_Wilson)
 
+
+#run a 1 dimension nominate with Gerry (MA) as the anchor
 result_1dim_Gerry <- wnominate(rc_convention, dims=1, polarity=c("ELBRIDGE_GERRY"))	
 summary(result_1dim_Gerry)
 
-#run a 1 dimension nominate with Gerry as the anchor
+#run a 2 dimension nominate with Wilson (PA) as the anchor
 result_2dim <- wnominate(rc_convention, dims=2, polarity=c("JAMES_WILSON","JAMES_WILSON"))	
 summary(result_2dim)
 
-#run a 2 dimension nominate with Wilson as the anchor
+#run a 2 dimension nominate with Gerry (MA) as the anchor
 result_2dim_alternative <- wnominate(rc_convention, dims=2, polarity=c("ELBRIDGE_GERRY","ELBRIDGE_GERRY"))	
 summary(result_2dim_alternative)
 
-#plot the analytics
+#plot the analytics (from the PSCL package)
 par(mar=c(2,2,2,2))
 plot(result_2dim)
 
@@ -132,7 +134,7 @@ nominate_2dim[,3]<-as.numeric(as.character(nominate_2dim[,3]))
 #since we want to look at things in order to eyeball them, we need to order the data
 nominate_2dim_plotdata<-nominate_2dim[order(nominate_2dim$V2),]
 
-#drop out legislators who didn't get a nominate score
+#drop out legislators who didn't get a NOMINATE score due to insufficient roll calls
 nominate_2dim_plotdata<-na.omit(nominate_2dim_plotdata)
 
 #now we're going to create a more visually appealing form of the name by taking the
@@ -153,7 +155,7 @@ del_2dim_plot
 ggsave("Wilson2DimPlot.pdf")
 
 
-#run a 3dimension nominate with Wilson as the anchor
+#run a 3dimension nominate with Wilson (PA) as the anchor
 result_3dim <- wnominate(rc_convention, dims=3, polarity=c("JAMES_WILSON","JAMES_WILSON","JAMES_WILSON"))	
 summary(result_3dim)
 
